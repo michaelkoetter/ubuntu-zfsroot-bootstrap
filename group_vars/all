@@ -15,4 +15,5 @@
 
 locale: en_US.UTF-8
 root_password: ubuntu
+# root_authorized_key: "..."
 serial_console: ttyS2
