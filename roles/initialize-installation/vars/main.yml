@@ -2,6 +2,7 @@
 install_packages:
   - debootstrap
   - zfsutils-linux
+  - dosfstools
 
 zfs_root_filesystems:
   - name: rpool/ROOT
