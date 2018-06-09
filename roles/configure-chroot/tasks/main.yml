@@ -9,7 +9,7 @@
   command: "locale-gen {{ locale }}"
 
 - name: set root password
-  shell: "echo root:{{ root_password }} | chpasswd"
+  shell: "echo 'root:{{ root_password }}' | chpasswd"
 
 - name: set root authorized key
   authorized_key:
@@ -41,7 +41,7 @@
     line: "ansible ALL=(ALL) NOPASSWD: ALL"
     validate: 'visudo -cf %s'
   when: ansible_authorized_key is defined
-  
+
 - name: install default netplan config
   copy:
     src: dhcp.yaml
