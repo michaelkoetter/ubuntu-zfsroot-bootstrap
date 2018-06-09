@@ -1,0 +1,8 @@
+---
+install_packages:
+  - dosfstools
+  - grub-efi-amd64
+  - linux-image-generic
+  - zfs-initramfs
+  - lsb-release
+  - openssh-server

@@ -1,0 +1,18 @@
+# WARNING: if these are defined, all data on the specified disks will be wiped!
+
+# zpool_disks:
+#   - /dev/disk/by-id/scsi-SATA_disk1
+#   - /dev/disk/by-id/scsi-SATA_disk2
+
+# Simple / striped layout
+# zpool_layout: "{{ zpool_disks | map('regex_replace', '(.*)', '\\1-part1') | join(' ') }}"
+
+# Mirror layout
+# zpool_layout: "mirror {{ zpool_disks | map('regex_replace', '(.*)', '\\1-part1') | join(' ') }}"
+
+# Grub-EFI will be installed to these partitions
+# efi_partitions: "{{ zpool_disks | map('regex_replace', '(.*)', '\\1-part3') | list }}"
+
+locale: en_US.UTF-8
+root_password: ubuntu
+serial_console: ttyS2

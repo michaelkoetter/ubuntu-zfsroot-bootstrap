@@ -1,0 +1,60 @@
+---
+- name: update package cache
+  apt:
+    update_cache: yes
+
+- name: install packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ install_packages }}"
+
+- name: partition disks
+  shell: |
+    sgdisk --zap-all {{ item }} && \
+    sgdisk  -n3:1M:+512M  -t3:EF00 {{ item }} && \
+    sgdisk  -n1:0:0       -t1:BF01 {{ item }}
+  with_items: "{{ zpool_disks }}"
+  when: zpool_disks is defined
+
+- name: create 'rpool' zpool
+  command: |
+    zpool create -f -O atime=off -O canmount=off -O compression=lz4 \
+      -O normalization=formD -O xattr=sa -O mountpoint=/ -R /mnt \
+      rpool {{ zpool_layout }}
+  when: zpool_layout is defined
+
+- name: create root zfs filesystems
+  zfs:
+    name: "{{ item.name }}"
+    extra_zfs_properties: "{{ item.options | default(omit) }}"
+    state: present
+  with_items: "{{ zfs_root_filesystems }}"
+
+- name: mount rpool/ROOT/ubuntu
+  command: "zfs mount rpool/ROOT/ubuntu"
+
+- name: create other zfs filesystems
+  zfs:
+    name: "{{ item.name }}"
+    extra_zfs_properties: "{{ item.options | default(omit) }}"
+    state: present
+  with_items: "{{ zfs_other_filesystems }}"
+
+- name: run debootstrap
+  command: "debootstrap --verbose bionic /mnt"
+
+- name: bind mounts
+  command: "mount --rbind /{{ item }} /mnt/{{ item }}"
+  args:
+    warn: False
+  with_items:
+    - dev
+    - proc
+    - sys
+
+- name: link mtab
+  file:
+    src: "/proc/mounts"
+    dest: "/mnt/etc/mtab"
+    state: link

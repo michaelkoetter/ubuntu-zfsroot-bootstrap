@@ -1,0 +1,12 @@
+---
+- name: create @install snapshot
+  command: "zfs snapshot rpool/ROOT/ubuntu@install"
+
+- name: unmount filesystems
+  shell: |
+    mount | grep -v zfs | tac | awk '/\/mnt/ {print $3}' | xargs -i{} umount -lf {}
+  args:
+    warn: False
+
+- name: export rpool
+  command: "zpool export rpool"  

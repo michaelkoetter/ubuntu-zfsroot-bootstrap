@@ -1,0 +1,14 @@
+---
+- hosts: install-host
+  roles:
+    - initialize-installation
+
+- hosts: install-chroot
+  roles:
+    - install-packages
+    - configure-chroot
+    - install-grub
+
+- hosts: install-host
+  roles:
+    - finalize-installation

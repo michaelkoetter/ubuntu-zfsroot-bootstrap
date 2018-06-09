@@ -1,0 +1,33 @@
+---
+install_packages:
+  - debootstrap
+  - zfsutils-linux
+
+zfs_root_filesystems:
+  - name: rpool/ROOT
+    options: 
+      canmount: off
+      mountpoint: none
+  - name: rpool/ROOT/ubuntu
+    options:
+      canmount: noauto
+      mountpoint: /
+
+zfs_other_filesystems:
+  - name: rpool/home
+    options: 
+      setuid: off
+  - name: rpool/home/root
+    options:
+      mountpoint: /root
+  - name: rpool/var
+    options:
+      canmount: off
+      setuid: off
+      exec: off
+  - name: rpool/var/cache
+  - name: rpool/var/log
+    options:
+      xattr: sa
+      acltype: posixacl
+  - name: rpool/var/spool

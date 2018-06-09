@@ -1,0 +1,35 @@
+---
+- name: configure grub
+  block:
+  - lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+      line: 'GRUB_CMDLINE_LINUX_DEFAULT=""'
+  - lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX='
+      line: 'GRUB_CMDLINE_LINUX="console=tty1 console={{ serial_console }},115200"'
+  - lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_TERMINAL='
+      line: 'GRUB_TERMINAL="console serial"'
+  - lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_SERIAL_COMMAND='
+      line: 'GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"'
+  - shell: |
+      update-initramfs -c -k all && \
+      update-grub
+
+- name: install grub to all EFI partitions
+  shell: |
+    mkdosfs -F 32 -n EFI {{ item.1 }} && \
+    mkdir -p /boot/efi && \
+    mount {{ item.1 }} /boot/efi && \
+    grub-install --target=x86_64-efi --efi-directory=/boot/efi \
+      --bootloader-id=ubuntu-{{ item.0 }} --recheck --no-floppy && \
+    umount /boot/efi
+  args:
+    warn: False
+  with_indexed_items: "{{ efi_partitions }}"
+  when: efi_partitions is defined

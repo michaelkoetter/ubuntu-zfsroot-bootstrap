@@ -1,0 +1,22 @@
+---
+- name: set system locale
+  lineinfile:
+    path: /etc/default/locale
+    regexp: "^LANG="
+    line: "LANG={{ locale }}"
+
+- name: generate locale
+  command: "locale-gen {{ locale }}"
+
+- name: set root password
+  shell: "echo root:{{ root_password }} | chpasswd"
+
+- name: fix zfs mount ordering
+  block:
+    - command: "zfs set mountpoint=legacy rpool/var/log"
+    - lineinfile:
+        path: /etc/fstab
+        regexp: "^rpool/var/log"
+        line: "rpool/var/log /var/log zfs defaults 0 0"
+
+  
