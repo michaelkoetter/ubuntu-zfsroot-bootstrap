@@ -3,6 +3,10 @@
   block:
   - lineinfile:
       path: /etc/default/grub
+      regexp: '^GRUB_HIDDEN_TIMEOUT='
+      state: absent
+  - lineinfile:
+      path: /etc/default/grub
       regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
       line: 'GRUB_CMDLINE_LINUX_DEFAULT=""'
   - lineinfile:
