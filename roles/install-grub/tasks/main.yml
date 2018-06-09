@@ -27,7 +27,6 @@
 
 - name: install grub to all EFI partitions
   shell: |
-    mkdosfs -F 32 -n EFI {{ item.1 }} && \
     mkdir -p /boot/efi && \
     mount {{ item.1 }} /boot/efi && \
     grub-install --target=x86_64-efi --efi-directory=/boot/efi \

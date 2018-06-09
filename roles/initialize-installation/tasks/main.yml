@@ -17,6 +17,11 @@
   with_items: "{{ zpool_disks }}"
   when: zpool_disks is defined
 
+- name: format EFI partitions
+  command: "mkdosfs -F 32 -n EFI {{ item }}"
+  with_items: "{{ efi_partitions }}"
+  when: efi_partitions is defined
+  
 - name: create 'rpool' zpool
   command: |
     zpool create -f -O atime=off -O canmount=off -O compression=lz4 \
