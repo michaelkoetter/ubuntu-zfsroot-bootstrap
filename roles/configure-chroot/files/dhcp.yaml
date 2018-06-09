@@ -4,5 +4,5 @@ network:
   ethernets:
     all-nics:
       match:
-        name: enp*
+        name: en*
       dhcp4: true
