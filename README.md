@@ -3,6 +3,6 @@
 This is totally experimental, use at your own risk!
 
 ```
-curl -O bootstrap.sh https://raw.githubusercontent.com/michaelkoetter/ubuntu-zfsroot-bootstrap/master/bootstrap.sh
+curl -O https://raw.githubusercontent.com/michaelkoetter/ubuntu-zfsroot-bootstrap/master/bootstrap.sh
 sudo sh bootstrap.sh
 ```
