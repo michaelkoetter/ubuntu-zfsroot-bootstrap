@@ -17,11 +17,36 @@
     user: root
   when: root_authorized_key is defined
 
+- name: create ansible user
+  user:
+    name: ansible
+    comment: Ansible User
+  when: ansible_authorized_key is defined
+
+- name: set ansible authorized key
+  authorized_key:
+    key: "{{ ansible_authorized_key }}"
+    user: ansible
+  when: ansible_authorized_key is defined
+
+- name: disable ansible password
+  command: usermod -p '!' ansible
+  when: ansible_authorized_key is defined
+
+- name: allow ansible passwordless sudo
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: "^ansible"
+    line: "ansible ALL=(ALL) NOPASSWD: ALL"
+    validate: 'visudo -cf %s'
+  when: ansible_authorized_key is defined
+  
 - name: install default netplan config
   copy:
     src: dhcp.yaml
     dest: /etc/netplan/dhcp.yaml
-    
+
 - name: fix zfs mount ordering
   block:
     - command: "zfs set mountpoint=legacy rpool/var/log"

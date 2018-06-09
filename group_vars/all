@@ -1,4 +1,4 @@
-# WARNING: if these are defined, all data on the specified disks will be wiped!
+# !!! WARNING !!! if these are defined, all data on the specified disks will be wiped!
 
 # zpool_disks:
 #   - /dev/disk/by-id/scsi-SATA_disk1
@@ -13,7 +13,14 @@
 # Grub-EFI will be installed to these partitions
 # efi_partitions: "{{ zpool_disks | map('regex_replace', '(.*)', '\\1-part3') | list }}"
 
-locale: en_US.UTF-8
+# !!! CHANGE THIS !!!
 root_password: ubuntu
+
+# Optional: authorized key to enable root ssh login
 # root_authorized_key: "..."
+
+# Set this to create an 'ansible' user with the specified key
+# ansible_authorized_key: "..."
+
+locale: en_US.UTF-8
 serial_console: ttyS2
