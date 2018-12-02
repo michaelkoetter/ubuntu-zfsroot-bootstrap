@@ -32,3 +32,6 @@ zfs_other_filesystems:
       xattr: sa
       acltype: posixacl
   - name: rpool/var/spool
+  - name: rpool/var/tmp
+    options:
+      exec: on

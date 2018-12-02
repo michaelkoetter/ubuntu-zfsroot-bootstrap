@@ -10,6 +10,9 @@
 # Mirror layout
 # zpool_layout: "mirror {{ zpool_disks | map('regex_replace', '(.*)', '\\1-part1') | join(' ') }}"
 
+# This should be OK for most drives nowadays
+zpool_ashift=12
+
 # Grub-EFI will be installed to these partitions
 # efi_partitions: "{{ zpool_disks | map('regex_replace', '(.*)', '\\1-part3') | list }}"
 

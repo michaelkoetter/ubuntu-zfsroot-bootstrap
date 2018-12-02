@@ -50,9 +50,14 @@
 - name: fix zfs mount ordering
   block:
     - command: "zfs set mountpoint=legacy rpool/var/log"
+    - command: "zfs set mountpoint=legacy rpool/var/tmp"
     - lineinfile:
         path: /etc/fstab
         regexp: "^rpool/var/log"
-        line: "rpool/var/log /var/log zfs defaults 0 0"
+        line: "rpool/var/log /var/log zfs noatime,nodev,noexec,nosuid 0 0"
+    - lineinfile:
+        path: /etc/fstab
+        regexp: "^rpool/var/tmp"
+        line: "rpool/var/tmp /var/tmp zfs noatime,nodev,nosuid 0 0"
 
   

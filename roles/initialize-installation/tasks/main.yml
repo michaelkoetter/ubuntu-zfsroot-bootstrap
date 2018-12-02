@@ -24,8 +24,15 @@
   
 - name: create 'rpool' zpool
   command: |
-    zpool create -f -O atime=off -O canmount=off -O compression=lz4 \
-      -O normalization=formD -O xattr=sa -O mountpoint=/ -R /mnt \
+    zpool create -f \
+      -o ashift={{ zpool_ashift | default(12) }}
+      -O atime=off \
+      -O canmount=off \
+      -O compression=lz4 \
+      -O normalization=formD \
+      -O xattr=sa \
+      -O mountpoint=/ \
+      -R /mnt \
       rpool {{ zpool_layout }}
   when: zpool_layout is defined
 
