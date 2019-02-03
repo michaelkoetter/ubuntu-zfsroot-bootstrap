@@ -19,7 +19,7 @@
   when: zpool_disks is defined
 
 - name: format EFI partitions
-  command: "mkdosfs -F32 -n EFI {{ item }}"
+  command: "mkfs.fat -s1 -F32 {{ item }}"
   with_items: "{{ efi_partitions }}"
   when: efi_partitions is defined
   
